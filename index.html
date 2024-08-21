@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro e Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 1rem;
+        }
+        .container input {
+            width: calc(100% - 1rem);
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .container button {
+            padding: 0.5rem;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #218838;
+        }
+        .hidden-content {
+            display: none;
+            margin-top: 2rem;
+        }
+        .hidden-content button {
+            background-color: #dc3545;
+        }
+        .hidden-content button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="authContainer">
+        <div id="loginSection">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Usuário" required>
+            <input type="password" id="loginPassword" placeholder="Senha" required>
+            <button onclick="login()">Entrar</button>
+            <p>Não tem uma conta? <a href="#" onclick="showRegister()">Cadastre-se</a></p>
+        </div>
+
+        <div id="registerSection" style="display: none;">
+            <h2>Cadastro</h2>
+            <input type="text" id="registerUsername" placeholder="Usuário" required>
+            <input type="password" id="registerPassword" placeholder="Senha" required>
+            <button onclick="register()">Cadastrar</button>
+            <p>Já tem uma conta? <a href="#" onclick="showLogin()">Faça login</a></p>
+        </div>
+    </div>
+
+    <div class="hidden-content" id="protectedContent">
+        <h2>Conteúdo Protegido</h2>
+        <p>Bem-vindo ao conteúdo protegido! Você está autenticado.</p>
+        <button onclick="logout()">Sair</button>
+    </div>
+
+    <script>
+        function showRegister() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('registerSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+        }
+
+        function register() {
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (username && password) {
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                alert('Cadastro realizado com sucesso! Agora você pode fazer login.');
+                showLogin();
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const storedUsername = localStorage.getItem('username');
+            const storedPassword = localStorage.getItem('password');
+
+            if (username === storedUsername && password === storedPassword) {
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('protectedContent').style.display = 'block';
+            } else {
+                alert('Usuário ou senha incorretos.');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('username');
+            localStorage.removeItem('password');
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('protectedContent').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+    </script>
+
+</body>
+</html>
